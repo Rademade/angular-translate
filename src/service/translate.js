@@ -1076,6 +1076,10 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
         }
         return deferred.promise;
       };
+      $translate.allLoaded = $q.defer();
+      $translate.alreadyLoaded = function(){
+        return $translate.allLoaded.promise;
+      };
 
       /**
        * @name applyNotFoundIndicators
@@ -1172,6 +1176,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
 
         var onLoaderSuccess = function (data) {
           var translationTable = {};
+          $translate.allLoaded.resolve();
           $rootScope.$emit('$translateLoadingSuccess', {language: key});
 
           if (angular.isArray(data)) {
